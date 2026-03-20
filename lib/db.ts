@@ -5,7 +5,7 @@ import { boolean, pgTable, serial, text, timestamp, varchar, json } from "drizzl
 
 console.log("Initializing database connection...");
 // Determine the database connection string
-let connectionString: string;
+let connectionString: string | null = null;
 
 // If DATABASE_URL is provided, use it directly
 if (process.env.DATABASE_URL) {
@@ -20,19 +20,16 @@ else if (
 ) {
   connectionString = `postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}/${process.env.PGDATABASE}?sslmode=require`;
 }
-// Fallback (should not happen if environment variables are properly set)
-else {
-  console.warn(
-    "No database credentials found in environment variables. Using fallback connection string."
-  );
-  connectionString = process.env.DATABASE_URL || "";
-}
 
 // Create a SQL query executor using the Neon serverless driver
-const sql = neon(connectionString);
+// Only initialize if we have a connection string
+let sql: any = null;
+if (connectionString) {
+  sql = neon(connectionString);
+}
 
-// Create a Drizzle instance
-export const db = drizzle(sql);
+// Create a Drizzle instance - will be null if no connection string
+export const db = sql ? drizzle(sql) : null;
 
 // Define the subscribers table schema - for newsletter subscribers only
 export const subscribers = pgTable("subscribers", {

@@ -7,7 +7,13 @@ import { formatDate } from "@/lib/utils"; // Assuming formatDate is in utils
 
 export default async function BlogPage() {
   // Use the imported BlogPost type
-  const posts: BlogPost[] = await db.select().from(blogPosts).orderBy(blogPosts.createdAt);
+  let posts: BlogPost[] = []
+  
+  if (db) {
+    posts = await db.select().from(blogPosts).orderBy(blogPosts.createdAt);
+  } else {
+    console.warn("Database not configured. Skipping blog posts fetch.")
+  }
 
   return (
     <div className="flex flex-col">

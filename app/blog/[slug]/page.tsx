@@ -11,6 +11,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 async function getBlogPost(slug: string) {
   try {
+    if (!db) {
+      console.warn("Database not configured. Cannot fetch blog post.")
+      return { post: null, error: new Error("Database not configured") }
+    }
     const post = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug)).limit(1)
     return { post: post[0] || null, error: null }
   } catch (error) {

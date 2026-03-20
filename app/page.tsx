@@ -14,14 +14,18 @@ export default async function Home() {
   let dbError = false
 
   try {
-    latestPosts = (await db.select().from(blogPosts).orderBy(blogPosts.createdAt).limit(3)).map(post => ({
-      id: post.id.toString(),
-      slug: post.slug,
-      title: post.title,
-      excerpt: post.excerpt,
-      coverImage: post.coverImage || undefined,
-      createdAt: post.createdAt ? post.createdAt.toISOString() : ""
-    }))
+    if (db) {
+      latestPosts = (await db.select().from(blogPosts).orderBy(blogPosts.createdAt).limit(3)).map(post => ({
+        id: post.id.toString(),
+        slug: post.slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        coverImage: post.coverImage || undefined,
+        createdAt: post.createdAt ? post.createdAt.toISOString() : ""
+      }))
+    } else {
+      console.warn("Database not configured. Skipping blog posts fetch.")
+    }
   } catch (error) {
     console.error("Error fetching blog posts:", error)
     dbError = true
