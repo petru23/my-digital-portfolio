@@ -9,6 +9,9 @@
     "lint": "eslint app components lib hooks --ignore-pattern node_modules/"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.41",
+    "@arcjet/inspect": "^1.3.0",
+    "@arcjet/next": "^1.3.0",
     "@aws-sdk/client-rds-data": "latest",
     "@clerk/nextjs": "^6.39.0",
     "@cloudflare/workers-types": "latest",
@@ -55,6 +58,7 @@
     "@types/sql.js": "latest",
     "@vercel/postgres": "latest",
     "@xata.io/client": "latest",
+    "ai": "^6.0.116",
     "autoprefixer": "^10.4.20",
     "better-sqlite3": "latest",
     "bun-types": "latest",
